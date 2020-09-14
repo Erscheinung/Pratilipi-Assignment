@@ -9,8 +9,6 @@ var express = require("express"),
     Story = require("./models/stories"),
     seedDB = require("./seeds")
 
-const port = 3000;
-
 var currentViewers = 0,
     viewCount = 0;
 
@@ -154,6 +152,6 @@ app.get("/register", function(req,res){
  }
  
 
-app.listen(port, () => 
+app.listen(process.env.PORT, process.env.IP, () => 
     console.log(`Pratilipi Stories listening on port ${port}!`))
 
