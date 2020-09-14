@@ -153,5 +153,5 @@ app.get("/register", function(req,res){
  
 
 app.listen(process.env.PORT, process.env.IP, () => 
-    console.log(`Pratilipi Stories listening on port ${port}!`))
+    console.log(`Pratilipi Stories server has started!`))
 
