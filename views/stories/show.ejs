@@ -1,0 +1,27 @@
+<%- include ("../partials/header") %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Pratilipi Stories</p>
+            <p> current users here: </p>
+            <p> total view counts: <%=story.totalViews%></p> 
+            <p> Incomplete implementation due to errors, 
+                therefore, online DB isn't integrated (only local mongoDB was used),
+                Still, if interested,
+                basic logic for liveViewCount and totalViews is given in app.js:62 onwards
+            </p>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <div class="caption-full">
+                    <h4><a><%=story.title%></a></h4>
+                    <p><%=story.content%></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%- include ("../partials/footer") %>
