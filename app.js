@@ -89,7 +89,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     console.log(err);
                 }
                 else{
-                    if(results==[]){
+                    if(results===[]){
                         // if not visited
                         console.log('already visited')
                         //regardless, increment CurrentViewers, decrement on logout/client connection closed
