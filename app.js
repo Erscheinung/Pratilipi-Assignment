@@ -94,7 +94,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                         // increment totalViews value if new user and update in DB
                         Story.update(
                             {_id: req.params.id},
-                            {totalViews:totalViews+1}
+                            {$inc:{totalViews:1}}
                         )    
                     }
                     else {
@@ -102,7 +102,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     }
                     Story.update(
                         {_id: req.params.id},
-                        {currentViewers:currentViewers+1}
+                        {$inc:{currentViewers:1}}
                     )                                   
                 }   
             });
