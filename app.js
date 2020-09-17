@@ -89,17 +89,24 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     if(results==[]){
                         // if not visited
                         console.log('already visited')
-                        // add article id value to User's articleId to remember that the page has been visited
                         
                         //regardless, increment CurrentViewers, decrement on logout/client connection closed
                     }
                     else {
                         console.log('not visited')
+                        // add article id value to User's articleId to remember that the page has been visited
+                        User.update(
+                            {_id:req.user.id},
+                            {$push: {articlesViewed:req.params.id}}
+                        );
                         //if not visited, increment totalViews value and update in
                         //stories Schema
                         viewCount = viewCount + 1;
                         console.log(viewCount)
-                        Story.findByIdAndUpdate({id:req.params.id},{totalViews:viewCount})
+                        Story.update(
+                            {_id: req.params.id},
+                            {totalViews:viewCount}
+                        )
     
                         //regardless, increment CurrentViewers, decrement on logout/connection closed
                     }
