@@ -110,7 +110,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
             req.on('close', function(){
                 Story.update(
                     {_id: req.params.id},
-                    {currentViewers:currentViewers-1}
+                    {$inc: {currentViewers:-1}}
                 )  
             });
        }
