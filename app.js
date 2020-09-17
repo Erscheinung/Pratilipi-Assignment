@@ -74,10 +74,10 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
            console.log('not found');
        } 
        else {
-            var Username = ""+req.user.username+"";
-            var articleId = ""+req.params.id+"";
+            var userid = ""+req.user.id;
+            var articleId = ""+req.params.id;
             User.find({$and:[
-                    {username: Username},
+                    {_id: userid},
                     {articlesViewed:articleId}
                     // check if the User has already visited this page
             ]}
@@ -89,15 +89,14 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     if(results==[]){
                         // if not visited
                         console.log('already visited')
-                        
                         //regardless, increment CurrentViewers, decrement on logout/client connection closed
                     }
                     else {
                         console.log('not visited')
                         // add article id value to User's articleId to remember that the page has been visited
                         User.update(
-                            {_id:req.user.id},
-                            {$push: {articlesViewed:req.params.id}}
+                            {_id:userid},
+                            {$push: {articlesViewed:articleId}}
                         );
                         //if not visited, increment totalViews value and update in
                         //stories Schema
@@ -107,7 +106,6 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                             {_id: req.params.id},
                             {totalViews:viewCount}
                         )
-    
                         //regardless, increment CurrentViewers, decrement on logout/connection closed
                     }
                 }
