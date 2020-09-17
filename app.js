@@ -7,7 +7,8 @@ var express = require("express"),
     LocalStrategy = require("passport-local"),
     User = require("./models/user"),
     Story = require("./models/stories"),
-    seedDB = require("./seeds")
+    seedDB = require("./seeds"),
+    ObjectId = require('mongoose').Types.ObjectId; 
 
 
 mongoose.Promise = require('bluebird');
@@ -74,7 +75,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
             var userid = ""+req.user.id;
             var articleId = ""+req.params.id;
             User.find({$and:[
-                    {_id: userid},
+                    {_id: new ObjectId(userid)},
                     {articlesViewed:articleId}
                     // check if the User has already visited this page
             ]}
@@ -85,15 +86,16 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                 else{
                     if(results==[]){
                         // if not visited
+                        console.log(results)
                         console.log('not visited')
                         // add article id value to User's articleId to remember that the page has been visited
                         User.update(
-                            {_id:userid},
+                            {_id: new ObjectId(userid)},
                             {$push: {articlesViewed:articleId}}
                         );
                         // increment totalViews value if new user and update in DB
                         Story.update(
-                            {_id: req.params.id},
+                            {_id: new ObjectId(req.params.id)},
                             {$inc:{totalViews:1}}
                         )    
                     }
@@ -101,7 +103,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                         console.log('already visited')
                     }
                     Story.update(
-                        {_id: req.params.id},
+                        {_id: new ObjectId(req.params.id)},
                         {$inc:{currentViewers:1}}
                     )                                   
                 }   
@@ -109,7 +111,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
             res.render("stories/show", {story: foundStory});
             req.on('close', function(){
                 Story.update(
-                    {_id: req.params.id},
+                    {_id: new ObjectId(req.params.id)},
                     {$inc: {currentViewers:-1}}
                 )  
             });
