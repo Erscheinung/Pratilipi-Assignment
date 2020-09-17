@@ -75,7 +75,9 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
        } 
        else {
             var userid = ""+req.user.id;
+            console.log(userid)
             var articleId = ""+req.params.id;
+            console.log(articleId)
             User.find({$and:[
                     {_id: userid},
                     {articlesViewed:articleId}
