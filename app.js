@@ -84,6 +84,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     // check if the User has already visited this page
             ]}
             ).exec(function(err,results){
+                console.log(results)
                 if(err){
                     console.log(err);
                 }
