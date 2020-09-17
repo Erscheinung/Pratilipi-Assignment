@@ -12,7 +12,16 @@ var express = require("express"),
 var currentViewers = 0,
     viewCount = 0;
 
-mongoose.connect("mongodb://localhost:27017/pratilipi", { useNewUrlParser: true })
+
+mongoose.Promise = require('bluebird');
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://relight:samplepassword@cluster0.fotre.mongodb.net/Cluster0?retryWrites=true&w=majority";
+
+mongoose
+    .connect(uri, {useNewUrlParser: true})
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err))
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine","ejs");
 app.use(express.static(__dirname + "/public"));
