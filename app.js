@@ -9,9 +9,6 @@ var express = require("express"),
     Story = require("./models/stories"),
     seedDB = require("./seeds")
 
-var currentViewers = 0,
-    viewCount = 0;
-
 
 mongoose.Promise = require('bluebird');
 const MongoClient = require('mongodb').MongoClient;
@@ -75,46 +72,47 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
        } 
        else {
             var userid = ""+req.user.id;
-            console.log(userid)
             var articleId = ""+req.params.id;
-            console.log(articleId)
             User.find({$and:[
-                    {"_id": ObjectId(userid)},
-                    {"articlesViewed":articleId}
+                    {_id: userid},
+                    {articlesViewed:articleId}
                     // check if the User has already visited this page
             ]}
             ).exec(function(err,results){
-                console.log(results)
                 if(err){
                     console.log(err);
                 }
                 else{
                     if(results==[]){
                         // if not visited
-                        console.log('already visited')
-                        //regardless, increment CurrentViewers, decrement on logout/client connection closed
-                    }
-                    else {
                         console.log('not visited')
                         // add article id value to User's articleId to remember that the page has been visited
                         User.update(
                             {_id:userid},
                             {$push: {articlesViewed:articleId}}
                         );
-                        //if not visited, increment totalViews value and update in
-                        //stories Schema
-                        viewCount[0] = viewCount + 1;
-                        console.log(viewCount)
+                        // increment totalViews value if new user and update in DB
                         Story.update(
                             {_id: req.params.id},
-                            {totalViews:viewCount}
-                        )
-                        //regardless, increment CurrentViewers, decrement on logout/connection closed
+                            {totalViews:totalViews+1}
+                        )    
                     }
-                }
-                
-            })
+                    else {
+                        console.log('already visited')
+                    }
+                    Story.update(
+                        {_id: req.params.id},
+                        {currentViewers:currentViewers+1}
+                    )                                   
+                }   
+            });
             res.render("stories/show", {story: foundStory});
+            req.on('close', function(){
+                Story.update(
+                    {_id: req.params.id},
+                    {currentViewers:currentViewers-1}
+                )  
+            });
        }
     });
 });
