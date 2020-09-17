@@ -100,6 +100,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                         )    
                     }
                     else {
+                        console.log(results)
                         console.log('already visited')
                     }
                     Story.update(
