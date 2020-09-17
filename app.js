@@ -79,8 +79,8 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
             var articleId = ""+req.params.id;
             console.log(articleId)
             User.find({$and:[
-                    {_id: userid},
-                    {articlesViewed:articleId}
+                    {"_id": ObjectId(userid)},
+                    {"articlesViewed":articleId}
                     // check if the User has already visited this page
             ]}
             ).exec(function(err,results){
@@ -89,7 +89,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                     console.log(err);
                 }
                 else{
-                    if(results===[]){
+                    if(results==[]){
                         // if not visited
                         console.log('already visited')
                         //regardless, increment CurrentViewers, decrement on logout/client connection closed
@@ -103,7 +103,7 @@ app.get("/stories/:id",isLoggedIn,function(req,res){
                         );
                         //if not visited, increment totalViews value and update in
                         //stories Schema
-                        viewCount = viewCount + 1;
+                        viewCount[0] = viewCount + 1;
                         console.log(viewCount)
                         Story.update(
                             {_id: req.params.id},
